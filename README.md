@@ -22,10 +22,30 @@ export PATH="$PATH:$(go env GOPATH)/bin"
 protoc --go_out=plugins=grpc:../. protobuf/helloworld.proto
 ```
 
+generate grpc-gateway
+```bash
+protoc --grpc-gateway_out ../. protobuf/helloworld.proto
+```
+
+generate swagger config
+```bash
+protoc --swagger_out . protobuf/helloworld.proto
+```
+
+or generate everything at once
+```bash
+protoc --go_out=plugins=grpc:../. --grpc-gateway_out ../. --swagger_out . protobuf/helloworld.proto
+```
+
 ## How to run
-### Run the server
+### Run the gRPC server
 ```bash
 go run server/main.go
+```
+
+### Run the REST server
+```bash
+go run rest/main.go
 ```
 
 ### Run the client
