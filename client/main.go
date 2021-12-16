@@ -22,7 +22,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	defer conn.Close()
+	defer func() {
+		e := conn.Close()
+		if e != nil {
+			log.Fatal(e)
+		}
+	}()
+
 	c := pb.NewGreeterClient(conn)
 
 	// Contact the server and print out its response.
@@ -30,7 +36,7 @@ func main() {
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	hello, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
